@@ -1,5 +1,6 @@
 package com.example.demo.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -18,16 +20,33 @@ import java.util.Set;
 public class Equipe implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idEquipe;
-    @Column(name = "nomEquipe", length = 30, nullable = false)
-    private  String nomEquipe;
-    @Enumerated(EnumType.ORDINAL)
-    private  Niveau niveau;
+    @Column(name="idEquipe")
+    private Integer idEquipe; // Clé primaire
+    private String nomEquipe;
 
-   @ManyToMany(cascade = CascadeType.ALL,mappedBy = "equipes")
-    private Set<Etudiant> etudiants;
+    @Enumerated(EnumType.STRING)
+    private Niveau niveau;
 
-   @OneToOne
-    private DetailEquipe equipeDetail;
+
+    //////
+    private String mail;
+
+    private String logo;
+
+    private Integer nbrDesMembresMax;
+
+
+
+
+
+
+    //////
+
+    @OneToOne
+    private DetailEquipe detaileq;
+
+    @ManyToMany
+    @JsonIgnore
+    private List<Etudiant> etuds;
 
 }

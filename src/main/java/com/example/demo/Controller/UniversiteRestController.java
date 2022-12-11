@@ -10,6 +10,7 @@ import com.example.demo.Service.IUniversiteService;
 import com.example.demo.Service.UniversiteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -17,6 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.persistence.criteria.CriteriaBuilder;
 import java.awt.*;
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -32,8 +36,9 @@ public class UniversiteRestController {
 
     @GetMapping("/all")
     @ResponseBody
-    public List<Universite> getAllUni(){
-        return iUniversiteService.retrieveAllUniversites();
+    public List<Universite> getAllUni(@RequestParam(defaultValue = "0") int pageNumber){
+
+        return iUniversiteService.retrieveAllUniversites(pageNumber);
     }
     @GetMapping("/maxid")
     @ResponseBody
@@ -43,6 +48,11 @@ public class UniversiteRestController {
 
     @PostMapping("/add")
     public Universite addUniversite(@RequestBody Universite universite){
+        LocalDate todaysDate = LocalDate.now();
+        //System.out.println(todaysDate);
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+        Date date = Date.from(todaysDate.atStartOfDay(defaultZoneId).toInstant());
+        universite.setDateAjout( date);
         return iUniversiteService.addUniversite(universite);
     }
    // @PostMapping(value = {"/addWithImage"}, consumes = {MediaType.MULTIPART_FORM_DATA_VALUE})
@@ -54,6 +64,11 @@ public class UniversiteRestController {
            // Set<ImageModel> images= uploadImage
             Set<ImageModel> images=uploadImage(file);
             universite.setImages(images);
+            LocalDate todaysDate = LocalDate.now();
+            //System.out.println(todaysDate);
+            ZoneId defaultZoneId = ZoneId.systemDefault();
+            Date date = Date.from(todaysDate.atStartOfDay(defaultZoneId).toInstant());
+            universite.setDateAjout( date);
            return iUniversiteService.addUniversite(universite);
         }catch(Exception e){
         System.out.println(e.getMessage());
@@ -93,5 +108,27 @@ public class UniversiteRestController {
         return  iUniversiteService.retrieveDepartementsByUniversite(idUni);
 
 }
-
+@GetMapping("/listdepart")
+    public List<Departement> listDepartement(){
+    return  iUniversiteService.listDepart();
 }
+@GetMapping("/rechercheParNom/{nom}")
+    List<Universite> rechercheParNom(@PathVariable("nom") String nom){
+        return iUniversiteService.rechercheParNom(nom);
+}
+@GetMapping("/listUniverApartirDate/{date}")
+    List<Universite> listUniverApartirDate(@PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date){
+        return iUniversiteService.listUniverApartirDate(date);
+}
+@GetMapping("/ListImagebyIduniv/{id}")
+    List<ImageModel> ListImagebyIduniv(@PathVariable("id") Integer id){
+        return iUniversiteService.ListImagebyIduniv(id);
+}
+
+@PostMapping("/ajouterEtAffecterlisteDepart/{idUniv}")
+    void ajouterEtAffecterlisteDepart(@RequestBody Set<Departement> list,@PathVariable("idUniv") Integer idUniv){
+
+        iUniversiteService.ajouterEtAffecterlisteDepart(list,idUniv);
+}
+}
+

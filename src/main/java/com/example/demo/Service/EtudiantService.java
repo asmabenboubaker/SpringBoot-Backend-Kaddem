@@ -3,19 +3,15 @@ package com.example.demo.Service;
 import com.example.demo.Entities.*;
 import com.example.demo.Repository.IContratRepo;
 import com.example.demo.Repository.IDepartementRepo;
-import com.example.demo.Repository.IEquipeRepo;
+import com.example.demo.Repository.IEquipeRepository;
 import com.example.demo.Repository.IEtudiantRepo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
+
 @Slf4j
 @Service("EtudiantService")
 @RequiredArgsConstructor
@@ -25,7 +21,7 @@ public class EtudiantService implements IEtudiantService {
     @Autowired
     IContratRepo iContratRepo;
     @Autowired
-    IEquipeRepo iEquipeRepo;
+    IEquipeRepository iEquipeRepo;
     @Autowired
     IDepartementRepo iDepartementRepo;
     public Etudiant addEtudiant(Etudiant e) {
@@ -95,9 +91,6 @@ public class EtudiantService implements IEtudiantService {
         return edtREpo.getEtudiantsByDepartement(d);
     }
 
-@Scheduled(cron = "*/60 * * * * * ")
-    void bonjour(){
-        log.info("hello");
-}
+
 
 }

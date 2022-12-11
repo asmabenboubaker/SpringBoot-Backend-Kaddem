@@ -16,4 +16,7 @@ public interface IDepartementRepo extends CrudRepository<Departement, Integer> {
 
     @Query("select max(idDepart) from Departement ")
     int getmaxId();
+    @Query("select count (d) from Departement d")
+    Integer countDepartements();
+
 }

@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -23,6 +24,7 @@ public class Universite implements Serializable {
     private int idUniv;
     @Column(name = "nomUniv", length = 30, nullable = false)
     private  String nomUniv;
+    private Date DateAjout;
     @ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     @JoinTable(name="universite_images",
              joinColumns =   {

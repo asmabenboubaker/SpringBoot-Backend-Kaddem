@@ -5,11 +5,13 @@ import com.example.demo.Entities.Etudiant;
 import com.example.demo.Entities.Universite;
 import com.example.demo.Repository.IDepartementRepo;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Slf4j
 @Service("DepartementService")
 @RequiredArgsConstructor
 public class DepartementService implements IDepartementService{
@@ -42,6 +44,7 @@ public class DepartementService implements IDepartementService{
     @Override
     public Departement assignEtudiantToDepartement(Integer id,Integer idDep) {
         Etudiant e=etudiantService.retrieveEtudiant(id);
+
         Departement d=retrieveDepartement(idDep);
         e.setDepartement(d);
         etudiantService.addEtudiant(e);
@@ -59,6 +62,20 @@ public class DepartementService implements IDepartementService{
     @Override
     public void delete(Integer idDepart) {
         departementRepo.deleteById(idDepart);
+    }
+
+    @Override
+    public Integer countDepartements() {
+        return departementRepo.countDepartements();
+    }
+
+    @Scheduled(cron = "*/60 * * * * * ")
+    void bonjour(){
+      int tailleuniv=  universiteService.countUniversites();
+      int tailleDepart=this.countDepartements();
+        log.info("nombre Universites ==="+tailleuniv+"*********** nombre departements ===" + tailleDepart);
+
+
     }
 
 

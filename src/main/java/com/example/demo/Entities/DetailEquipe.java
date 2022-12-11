@@ -1,5 +1,6 @@
 package com.example.demo.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,11 +17,15 @@ import java.io.Serializable;
 public class DetailEquipe implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idDetailEquipe;
-    @Column(name = "thematique", length = 30, nullable = false)
-    private  String thematique;
-    private int salle;
+    @Column(name="idDetailEquipe")
+    private Integer idDetailEquipe; // Clé primaire
+    private Integer salle;
+    private String thematique;
 
-    @OneToOne(mappedBy = "equipeDetail")
+    ////
+    private String commentaire;
+
+    @OneToOne(cascade = CascadeType.REMOVE,mappedBy = "detaileq")
+    @JsonIgnore
     private Equipe equipe;
 }
