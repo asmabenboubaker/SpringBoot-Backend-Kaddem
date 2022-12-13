@@ -27,4 +27,5 @@ public interface IUniversiteService {
     List<ImageModel> ListImagebyIduniv(Integer id);
     void ajouterEtAffecterlisteDepart(Set<Departement> list, Integer idUniv);
    Integer countUniversites();
+   void deleteImage(Integer idUniver,Long idImage);
 }
